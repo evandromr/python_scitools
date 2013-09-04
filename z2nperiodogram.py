@@ -4,7 +4,7 @@ import pp  # parallel python library
 import astropy.io.fits as fits  # FITS manipulating py library
 import numpy as np  # numeric python for array manipulation
 import os  # os utilitites
-import rayleighz2n
+import myscitools
 
 
 if __name__ == '__main__':
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     #----------------- The parallelism starts here ------------------------
     ncpus = int(raw_input('Enter the number of processor to use: '))
-    if ncpus < 1 :
+    if ncpus < 1:
         ncpus = 1  # default number of cpus = 1
 
     freqlist = np.array_split(freqs, ncpus)
@@ -34,8 +34,8 @@ if __name__ == '__main__':
 
     print "\n Calculating with", job_server.get_ncpus(), "processor(s)\n"
 
-    jobs = [job_server.submit(rayleighz2n.rayleighz2n, (somefreqs, time, harm),
-        (), ("numpy",)) for somefreqs in freqlist]
+    jobs = [job_server.submit(myscitools.z2n, (somefreqs, time, harm), (),
+            ("numpy",)) for somefreqs in freqlist]
 
     results = []
     [[results.append(value) for value in job()] for job in jobs]
