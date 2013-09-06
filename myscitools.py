@@ -1,4 +1,3 @@
-#bla bla
 #!/usr/env python
 
 import numpy
