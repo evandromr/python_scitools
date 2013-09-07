@@ -1,3 +1,4 @@
+
 import numpy
 import astropy.io.fits as fits
 
@@ -69,20 +70,16 @@ def make2colfits(col1, col2, outptname='output.fits'):
     cols = fits.ColDefs([c1, c2])
     tbhdu = fits.new_table(cols)
     tbhdu.writeto(outptname)
-    print '\n Created file {0} \n'.format(outptname)
+    print ' Created file {0} \n\n'.format(outptname)
     return True
 
 
-def addlc(input1, input2):
+def addlc(input1, input2, output='output.fits'):
     '''
     Add 2 light curves
     '''
     lc1 = fits.open(input1)
     lc2 = fits.open(input2)
-    string1 = input1.split('_')
-    string2 = input2.split('_')
-    output = '_'.join([string1[0], string1[1], 'add', string1[3], string2[3],
-                      string1[4]])+'.fits'
     time = lc1[1].data.field('TIME')
     rate1 = lc1[1].data.field('RATE')
     rate2 = lc2[1].data.field('RATE')
@@ -92,28 +89,27 @@ def addlc(input1, input2):
     timecol = [time, 'TIME', 'E', 's']
     addcol = [add, 'RATE', 'E', 'count/s']
     make2colfits(timecol, addcol, output)
-    print ' DONE!'
     return True
 
 
-def ratiolc(input1, input2):
+def ratiolc(input1, input2, output='output.fits'):
     '''
     Ratio between 2 light curves
     '''
     lc1 = fits.open(input1)
     lc2 = fits.open(input2)
-    string1 = input1.split('_')
-    string2 = input2.split('_')
-    output = '_'.join([string1[0], string1[1], 'ratio', string1[3], string2[3],
-                      string1[4]])+'.fits'
     time = lc1[1].data.field('TIME')
     rate1 = lc1[1].data.field('RATE')
     rate2 = lc2[1].data.field('RATE')
     lc1.close()
     lc2.close()
-    ratio = rate1/rate2
-    timecol = [time, 'TIME', 'E', 's']
-    ratiocol = [ratio, 'RATE', 'E', 'count/s']
-    make2colfits(timecol, ratiocol, output)
-    print ' DONE!'
+    try:
+        ratio = rate1/rate2
+    except ValueError:
+        print " {0} and {1} have differents size!".format(input1, input2)
+        return False
+    else:
+        timecol = [time, 'TIME', 'E', 's']
+        ratiocol = [ratio, 'RATE', 'E', '']
+        make2colfits(timecol, ratiocol, output)
     return True
