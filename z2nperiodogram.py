@@ -1,9 +1,9 @@
 #!/usr/env python
 
 import pp  # parallel python library
+import os  # os utilitites
 import astropy.io.fits as fits  # FITS manipulating py library
 import numpy as np  # numeric python for array manipulation
-import os  # os utilitites
 import myscitools
 
 
@@ -41,12 +41,9 @@ if __name__ == '__main__':
     [[results.append(value) for value in job()] for job in jobs]
 
     # create and write the output.fits file
-    col1 = fits.Column(name='Frequency', format='E', unit='Hz', array=freqs)
-    col2 = fits.Column(name='Z2n', format='E', unit='arbitrary', array=results)
-    cols = fits.ColDefs([col1, col2])
-    tbhdu = fits.new_table(cols)
-    tbhdu.writeto(outptname)
-    print ' DONE!'
+    col1 = [freqs, 'Frequency', 'E', 'Hz']
+    col2 = [results, 'Z2n Power', 'E', 'arbitrary']
+    myscitools.make2colfits(col1, col2, outptname)
     print ' Please, see the file {0} to results\n\n'.format(outptname)
 
     #prints jobs information
