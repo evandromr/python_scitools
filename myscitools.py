@@ -103,13 +103,25 @@ def ratiolc(input1, input2, output='output.fits'):
     rate2 = lc2[1].data.field('RATE')
     lc1.close()
     lc2.close()
+
+    timecol = [time, 'TIME', 'E', 's']
+    sum = rate1+rate2
+
     try:
         ratio = rate1/rate2
     except ValueError:
         print " could not divide {0} and {1}!".format(input1, input2)
         return False
     else:
-        timecol = [time, 'TIME', 'E', 's']
         ratiocol = [ratio, 'RATE', 'E', '']
-        makefits(output, timecol, ratiocol)
+
+    try:
+        hardness = (rate2-rate1)/sum
+    except ValueError:
+        print " Could not calculate hardness. The sum of intensity is 0!"
+        return False
+    else:
+        hardcol = [hardness, 'HR', 'E', '']
+
+    makefits(output, timecol, ratiocol, hardcol)
     return True
