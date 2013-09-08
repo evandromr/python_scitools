@@ -85,9 +85,17 @@ def addlc(input1, input2, output='output.fits'):
     rate2 = lc2[1].data.field('RATE')
     lc1.close()
     lc2.close()
-    add = rate1+rate2
+
     timecol = [time, 'TIME', 'E', 's']
-    addcol = [add, 'RATE', 'E', 'count/s']
+
+    try:
+        add = rate1+rate2
+    except ValueError:
+        print "Coult not add lightcurves {0} and {1}".format(input1, input2)
+        return False
+    else:
+        addcol = [add, 'RATE', 'E', 'count/s']
+
     makefits(output, timecol, addcol)
     return True
 
@@ -105,8 +113,14 @@ def ratiolc(input1, input2, output='output.fits'):
     lc2.close()
 
     timecol = [time, 'TIME', 'E', 's']
-    sum = rate1+rate2
-    sumcol = [sum, 'RATE', 'E', 'counts/s']
+
+    try:
+        sum = rate1+rate2
+    except ValueError:
+        print " Coult not add lightcurves {0} and {1}".format(input1, input2)
+        return False
+    else:
+        sumcol = [sum, 'RATE', 'E', 'counts/s']
 
     try:
         ratio = rate1/rate2
