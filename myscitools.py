@@ -106,6 +106,7 @@ def ratiolc(input1, input2, output='output.fits'):
 
     timecol = [time, 'TIME', 'E', 's']
     sum = rate1+rate2
+    sumcol = [sum, 'RATE', 'E', 'counts/s']
 
     try:
         ratio = rate1/rate2
@@ -113,7 +114,7 @@ def ratiolc(input1, input2, output='output.fits'):
         print " could not divide {0} and {1}!".format(input1, input2)
         return False
     else:
-        ratiocol = [ratio, 'RATE', 'E', '']
+        ratiocol = [ratio, 'RATIO', 'E', '']
 
     try:
         hardness = (rate2-rate1)/sum
@@ -123,5 +124,5 @@ def ratiolc(input1, input2, output='output.fits'):
     else:
         hardcol = [hardness, 'HR', 'E', '']
 
-    makefits(output, timecol, ratiocol, hardcol)
+    makefits(output, timecol, sumcol, ratiocol, hardcol)
     return True
