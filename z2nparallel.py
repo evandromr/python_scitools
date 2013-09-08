@@ -43,8 +43,7 @@ if __name__ == '__main__':
     # create and write the output.fits file
     col1 = [freqs, 'Frequency', 'E', 'Hz']
     col2 = [results, 'Z2n Power', 'E', 'arbitrary']
-    myscitools.make2colfits(col1, col2, outptname)
-    print ' Please, see the file {0} to results\n\n'.format(outptname)
+    myscitools.makefits(outptname, col1, col2)
 
     #prints jobs information
     job_server.print_stats()
