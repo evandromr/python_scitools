@@ -1,4 +1,3 @@
-
 import numpy
 import astropy.io.fits as fits
 
@@ -45,32 +44,33 @@ def z2n(freqs, time, harm=1):
     return Z2n
 
 
-def make2colfits(col1, col2, outptname='output.fits'):
+def makefits(outptname='output.fits', *cols):
     '''
-    make2colfits(col1, col2[, outptname])
+    makefits(outptname, col1[, col2, col3, ...])
 
     Description
     ----
-    Creates a fits file with 2 columns and named <outptname>
+    Creates a fits file with the giver columns columns and named <outptname>
 
     Input
     ----
-    col1 : list of values with [array, 'name', 'format', 'unit']
-    col2 : list of values with [array, 'name', 'format', 'unit']
-    outptname: string to name the output file
+    outptname : a string to name de output file
+    cols : one or more lists in the format:
+        col1 : [array, 'name-of-the-column', 'format', 'unit']
 
     Returns
     ----
     Boolean True
-    and creates the file on the current directory
+    and creates the file <outptname> on the current directory
 
     '''
-    c1 = fits.Column(name=col1[1], format=col1[2], unit=col1[3], array=col1[0])
-    c2 = fits.Column(name=col2[1], format=col2[2], unit=col2[3], array=col2[0])
-    cols = fits.ColDefs([c1, c2])
-    tbhdu = fits.new_table(cols)
+    columns = []
+    for i in xrange(len(cols)):
+        columns.append(fits.Column(name=cols[i][1], format=cols[i][2],
+                                   unit=cols[i][3], array=cols[i][0]))
+    tbhdu = fits.new_table(columns)
     tbhdu.writeto(outptname)
-    print ' Created file {0} \n\n'.format(outptname)
+    print '\n Created file {0} \n'.format(outptname)
     return True
 
 
@@ -88,7 +88,7 @@ def addlc(input1, input2, output='output.fits'):
     add = rate1+rate2
     timecol = [time, 'TIME', 'E', 's']
     addcol = [add, 'RATE', 'E', 'count/s']
-    make2colfits(timecol, addcol, output)
+    makefits(output, timecol, addcol)
     return True
 
 
@@ -106,10 +106,10 @@ def ratiolc(input1, input2, output='output.fits'):
     try:
         ratio = rate1/rate2
     except ValueError:
-        print " {0} and {1} have differents size!".format(input1, input2)
+        print " could not divide {0} and {1}!".format(input1, input2)
         return False
     else:
         timecol = [time, 'TIME', 'E', 's']
         ratiocol = [ratio, 'RATE', 'E', '']
-        make2colfits(timecol, ratiocol, output)
+        makefits(output, timecol, ratiocol)
     return True
