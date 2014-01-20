@@ -50,11 +50,12 @@ def makefits(outptname='output.fits', *cols):
 
     Description
     ----
-    Creates a fits file with the giver columns columns and named <outptname>
+    Creates a fits file with the giver columns and named <outptname>
 
     Input
     ----
     outptname : a string to name de output file
+
     cols : one or more lists in the format:
         col1 : [array, 'name-of-the-column', 'format', 'unit']
 
