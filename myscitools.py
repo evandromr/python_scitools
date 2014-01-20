@@ -50,7 +50,7 @@ def makefits(outptname='output.fits', *cols):
 
     Description
     ----
-    Creates a fits file with the giver columns and named <outptname>
+    Creates a fits file with the provided columns information
 
     Input
     ----
