@@ -2,11 +2,11 @@
 
 import numpy as np
 import scipy.signal as ss
-import pyfits as pf
+import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 
 inpt = str(raw_input("Nome do Arquivo: "))
-lc = pf.open(inpt)
+lc = fits.open(inpt)
 
 # Convert to big-endian array is necessary to the lombscargle function
 time = np.array(lc[1].data["TIME"], dtype='float64')

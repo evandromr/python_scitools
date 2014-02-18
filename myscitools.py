@@ -41,6 +41,7 @@ def z2n(freqs, time, harm=1):
             phisin = numpy.sin(arg)
             aux = aux + (phicos.sum())**2 + (phisin.sum())**2
         Z2n.append(2.0*aux/N)
+
     return Z2n
 
 
@@ -62,6 +63,9 @@ def makefits(outptname='output.fits', *cols):
     Returns
     ----
     Boolean True
+
+    Output
+    ----
     and creates the file <outptname> on the current directory
 
     '''
@@ -72,6 +76,7 @@ def makefits(outptname='output.fits', *cols):
     tbhdu = fits.new_table(columns)
     tbhdu.writeto(outptname)
     print '\n Created file {0} \n'.format(outptname)
+
     return True
 
 
