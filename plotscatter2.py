@@ -10,7 +10,7 @@ if __name__ == '__main__':
     '''
 
     inpt1 = str(raw_input("Nome do primeiro arquivo: "))
-    inpt2 = str(raw_input("Nome do primeiro arquivo: "))
+    inpt2 = str(raw_input("Nome do segundo arquivo: "))
     field1 = str(raw_input("Nome da coluna X: "))
     field2 = str(raw_input("Nome da coluna Y: "))
 
