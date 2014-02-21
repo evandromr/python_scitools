@@ -9,10 +9,10 @@ if __name__ == '__main__':
     scatter 2 columns of 2 fits files
     '''
 
-    inpt1 = str(raw_input("Nome do primeiro arquivo: "))
-    inpt2 = str(raw_input("Nome do segundo arquivo: "))
-    field1 = str(raw_input("Nome da coluna X: "))
-    field2 = str(raw_input("Nome da coluna Y: "))
+    inpt1 = str(raw_input("Nome do arquivo 1 (eixo x): "))
+    inpt2 = str(raw_input("Nome do arquivo 2 (eixo y): "))
+    field1 = str(raw_input("Nome da coluna do arquivo 1 (eixo x): "))
+    field2 = str(raw_input("Nome da coluna do arquivo 2 (eixo y): "))
 
     tb1 = fits.open(inpt1)
     tb2 = fits.open(inpt2)
