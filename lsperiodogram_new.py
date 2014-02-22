@@ -17,7 +17,7 @@ norm = time.shape[0]
 
 exclude = []
 for i in xrange(len(rate)):
-    if rate[i] > 0 :
+    if rate[i] > 0:
         pass
     else:
         exclude.append(i)
@@ -47,7 +47,13 @@ pgram = ss.lombscargle(ntime, nrate, afreqs)
 
 # Plot lightcurve on top panel and powerspectrum on bottom panel
 plt.subplot(2, 1, 1)
-plt.plot(time, rate, 'k-')
+plt.plot(time, rate, 'bo-')
+plt.xlabel('Time [s]', fontsize=12)
+plt.ylabel('Rate [counts/s]', fontsize=12)
+plt.xlim(timemin, timemax)
 plt.subplot(2, 1, 2)
 plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b-')
+plt.xlabel('Frequency [Hz]', fontsize=12)
+plt.ylabel('$Z_n^2$ Power', fontsize=12)
+plt.xlim(freqmin, freqmax)
 plt.show()

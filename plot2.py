@@ -19,5 +19,7 @@ if __name__ == "__main__":
     y = tb2[1].data.field(field2)
     tb.close()
 
-    plt.plot(x,y)
+    plt.plot(x, y)
+    plt.xlabel(field1)
+    plt.ylabel(field2)
     plt.show()

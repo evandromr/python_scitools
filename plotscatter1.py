@@ -19,4 +19,6 @@ if __name__ == '__main__':
     y = tb1[1].data.field(field2)
 
     plt.scatter(x, y)
+    plt.xlabel(field1)
+    plt.xlabel(field2)
     plt.show()

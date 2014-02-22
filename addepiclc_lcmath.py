@@ -21,8 +21,6 @@ if __name__ == '__main__':
     mossfiles = ['MOSS'+mos1[4:] for mos1 in mos1files]
     epicfiles = ['EPIC'+mos1[4:] for mos1 in mos1files]
 
-
-
     for mos1, mos2, moss in zip(mos1files, mos2files, mossfiles):
         subprocess.call(['lcmath', mos1, mos2, moss, '1.', '1.', 'yes'])
 

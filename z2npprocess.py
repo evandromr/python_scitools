@@ -8,7 +8,7 @@ import astropy.io.fits as fits  # FITS manipulating library
 import matplotlib.pyplot as plt
 import numpy as np  # numeric python for array manipulation
 
-import myscitools # my personal tools
+import myscitools  # my personal tools
 
 
 #input file informations and variables atributions----------------------
