@@ -2,7 +2,7 @@
 
 import pprocess  # parallel computing module
 import os  # os utilitites
-import time  # 
+import time  # keep track of time
 
 import astropy.io.fits as fits  # FITS manipulating library
 import matplotlib.pyplot as plt
@@ -41,18 +41,17 @@ print "\n Calculating with ", nproc, " processor(s)\n"
 tic = time.time()
 [parallel_z2n(somefreqs, times, harm) for somefreqs in freqlist]
 
-print 'time = {0}'.format(time.time() - tic)
 z2n = []
 for result in results:
     for value in result:
         z2n.append(value)
 
-print z2n
+print 'time = {0}'.format(time.time() - tic)
 
 plt.plot(freqs, z2n)
 plt.show()
 plt.plot(freqs, z2n)
-plt.savefig('teste.png')
+plt.savefig('z2n.png')
 
 #create and write the output.fits file
 col1 = [freqs, 'Frequency', 'E', 'Hz']
