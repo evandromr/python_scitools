@@ -38,7 +38,7 @@ parallel_z2n = results.manage(pprocess.MakeReusable(myscitools.z2n))
 
 print "\n Calculating with ", nproc, " processor(s)\n"
 
-tic = clock.time()
+tic = time.time()
 [parallel_z2n(somefreqs, times, harm) for somefreqs in freqlist]
 
 print 'time = {0}'.format(time.time() - tic)
@@ -49,6 +49,8 @@ for result in results:
 
 print z2n
 
+plt.plot(freqs, z2n)
+plt.show()
 plt.plot(freqs, z2n)
 plt.savefig('teste.png')
 
