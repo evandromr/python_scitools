@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import astropy.io.fits as fits
 
+
 if __name__ == "__main__":
     '''
     shows the plot 2 given coluns of a fits file
