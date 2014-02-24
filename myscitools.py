@@ -92,15 +92,10 @@ def addlc(input1, input2, output='output.fits'):
     lc1.close()
     lc2.close()
 
+    add = rate1+rate2
+    
     timecol = [time, 'TIME', 'E', 's']
-
-    try:
-        add = rate1+rate2
-    except ValueError:
-        print "Coult not add lightcurves {0} and {1}".format(input1, input2)
-        return False
-    else:
-        addcol = [add, 'RATE', 'E', 'count/s']
+    addcol = [add, 'RATE', 'E', 'count/s']
 
     makefits(output, timecol, addcol)
     return True
