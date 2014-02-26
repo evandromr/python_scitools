@@ -33,18 +33,17 @@ ntime = np.delete(time, exclude)
 # --------------------------------------------
 
 # normalize count rate
-rate -= rate.mean()
-rate /= rate.sted()
+nrate -= nrate.mean()
 
 # maximum frequecy limited by resolution
 freqmax = 1.0/bin
 
 # Ther periodogram itself
-f, p = ss.periodogram(nrate, fs=freqmax)
+f, p = ss.periodogram(nrate, fs=freqmax, nfft=10*len(nrate))
 
 # Plot lightcurve on top panel
 plt.subplot(2, 1, 1)
-plt.plot(time, rate, 'bo-')
+plt.plot(ntime, nrate, 'bo-')
 plt.xlabel('Time [s]', fontsize=12)
 plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
 

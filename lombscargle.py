@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 inpt = str(raw_input("Nome do Arquivo: "))
 lc = fits.open(inpt)
 bin = float(raw_input("bin size (or camera resolution): "))
-oversample = float(raw_input('Fator de Oversample:'))
 
 # Convert to big-endian array is necessary to the lombscargle function
 time = np.array(lc[1].data["TIME"], dtype='float64')
@@ -34,7 +33,6 @@ ntime = np.delete(time, exclude)
 
 # normalize rate array
 nrate -= nrate.mean()
-nrate /= nrate.std()
 
 # normalization to the periodogram
 norm = ntime.shape[0]
@@ -43,13 +41,13 @@ norm = ntime.shape[0]
 interval = time.max()-time.min()
 
 # minimum frequency limited by observed time
-freqmin = 2.0/interval
+freqmin = 1.0/interval
 
 # maximium frequency limited by time resolution
 freqmax = 1.0/bin
 
 # size of the array of frequencies
-nint = oversample/freqmin
+nint = 10*len(nrate)
 
 # Frequency array
 freqs = np.linspace(freqmin, freqmax, nint)
@@ -62,15 +60,17 @@ pgram = ss.lombscargle(ntime, nrate, afreqs)
 
 # Plot lightcurve on top panel
 plt.subplot(2, 1, 1)
-plt.plot(time, rate, 'bo-')
+plt.plot(ntime, nrate, 'bo-')
 plt.xlabel('Time [s]', fontsize=12)
 plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
 plt.xlim(time.min(), time.max())
 
 # Plot powerspectrum on bottom panel
 plt.subplot(2, 1, 2)
-plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b-')
+plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b.-')
 plt.xlabel('Frequency [Hz]', fontsize=12)
 plt.ylabel('$Z_n^2$ Power', fontsize=12)
 plt.xlim(freqmin, freqmax)
+
+# show plot
 plt.show()
