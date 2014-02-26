@@ -40,7 +40,7 @@ def z2n(freqs, time, harm=1):
             phicos = numpy.cos(arg)
             phisin = numpy.sin(arg)
             aux = aux + (phicos.sum())**2 + (phisin.sum())**2
-        Z2n.append(2.0*aux/N)
+        Z2n.append((2.0/N)*aux)
 
     return Z2n
 
