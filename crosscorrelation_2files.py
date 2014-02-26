@@ -57,13 +57,23 @@ if __name__ == "__main__":
     x = tb1.field(xcol)
     y = tb2.field(ycol)
 
-    # eclude NaN values
-    #x2 = x[np.logical_and(~(np.isnan(x)), ~(np.isnan(y)))]
-    #y2 = y[np.logical_and(~(np.isnan(y)), ~(np.isnan(x)))]
-    #t2 = t[np.logical_and(~(np.isnan(y)), ~(np.isnan(x)))]
-    #x = x2
-    #y = y2
-    #t = t2
+    # Exclude NaN and negative values -------------------------
+    print ''
+    print 'Excluding nan and negative values...'
+    print ''
+    exclude = []
+    for i in xrange(len(rate)):
+        if ((x[i] > 0) and (y[i] > 0)):
+            pass
+        else:
+            exclude.append(i)
+
+    exclude = np.array(exclude)
+    
+    t = np.delete(t, exclude)
+    x = np.delete(x, exclude)
+    y = np.delete(y, exclude)
+    #-----------------------------------------------------------
 
     t -= min(t)
     x -= x.mean()
