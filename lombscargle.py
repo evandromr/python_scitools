@@ -47,7 +47,7 @@ freqmin = 1.0/interval
 freqmax = 1.0/bin
 
 # size of the array of frequencies
-nint = 10*len(nrate)
+nint = len(nrate)
 
 # Frequency array
 freqs = np.linspace(freqmin, freqmax, nint)
@@ -67,7 +67,8 @@ plt.xlim(time.min(), time.max())
 
 # Plot powerspectrum on bottom panel
 plt.subplot(2, 1, 2)
-plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b.-')
+plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b.-',
+        label='f = {0}'.format(freqs[np.argmax(pgram)]))
 plt.xlabel('Frequency [Hz]', fontsize=12)
 plt.ylabel('$Z_n^2$ Power', fontsize=12)
 plt.xlim(freqmin, freqmax)
