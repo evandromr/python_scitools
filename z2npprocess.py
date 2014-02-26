@@ -32,7 +32,6 @@ if nproc < 1:
 
 freqlist = np.array_split(freqs, nproc)
 
-
 results = pprocess.Map(limit=nproc, reuse=1)
 parallel_z2n = results.manage(pprocess.MakeReusable(myscitools.z2n))
 
