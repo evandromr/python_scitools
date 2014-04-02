@@ -10,8 +10,8 @@ if __name__ == "__main__":
     '''
 
     inptname = str(raw_input("Nome do Arquivo: "))
-    field1 = str(raw_input("Nome da coluna X: "))
-    field2 = str(raw_input("Nome da coluna Y: "))
+    field1 = str(raw_input("Nome da coluna 1 (x): "))
+    field2 = str(raw_input("Nome da coluna 2 (y): "))
 
     tb = fits.open(inptname)
     x = tb[1].data.field(field1)
