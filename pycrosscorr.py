@@ -72,33 +72,23 @@ if __name__ == "__main__":
         If indentifying columns by position, start counting from ZERO
     '''
 
-#   fmt = str(raw_input("Input files format (ascii/fits): "))
-    fmt = 'fits'
+    fmt = str(raw_input("Input files format (ascii/fits): "))
 
-#   inpt1 = str(raw_input("File 1: "))
-#   inpt2 = str(raw_input("File 2: "))
-    inpt1 = 'PN_lc_net_032keV_bin150_timed.ds'
-    inpt2 = 'PN_lc_net_4510keV_bin150_timed.ds'
+    inpt1 = str(raw_input("File 1: "))
+    inpt2 = str(raw_input("File 2: "))
 
 
     tb1 = table.Table.read(inpt1, format=fmt)
     tb2 = table.Table.read(inpt2, format=fmt)
 
-#   timecol = raw_input("Time column name or position (starting from zero): ")
-#   xcol = raw_input("series 1 column name or position (starting from zero): ")
-#   xerr = raw_input("series 1 error column name or position (starting from zero): ")
-#   ycol = raw_input("series 2 column name or position (starting from zero): ")
-#   yerr = raw_input("series 2 error column name or position (starting from zero): ")
-
-    timecol = 'TIME'
-    xcol = 'RATE'
-    xerr = 'ERROR'
-    ycol = 'RATE'
-    yerr = 'ERROR'
+    timecol = raw_input("Time column name or position (starting from zero): ")
+    xcol = raw_input("series 1 column name or position (starting from zero): ")
+    xerr = raw_input("errors 1 column name or position (starting from zero): ")
+    ycol = raw_input("series 2 column name or position (starting from zero): ")
+    yerr = raw_input("errors 2 column name or position (starting from zero): ")
 
 #   check if columns is an integer (column position)
 #   if not assume its a string (column name)
-
     try:
         timecol = int(timecol)
     except ValueError:
@@ -187,7 +177,7 @@ if __name__ == "__main__":
 #    plt.plot(t, y, 'k--', linewidth='5.0')
 #    plt.show()
 
-#   store calculated time shift for each simulated curve 
+#   store calculated time shift for each simulated curve
     shiftes = []
     for newx, newy in zip(newxses, newyses):
         newcorr, newoffset, nnewt, newshift = corrfunc(newx, newy, t)
@@ -210,14 +200,17 @@ if __name__ == "__main__":
     print 'mean =', mu
     print 'std =', sigma
 
-#######
-#  BUG
-#######
-#   Shouldn't have to multiply by 100 !!!
-    gaussian = gausfunc(distbins, mu, sigma)*100
+#   gaussian distribution for plot
+    gaussian = gausfunc(distbins, mu, sigma)
 
 #   normalize ditribution
     distribution /= norm
+
+#######
+#  BUG ???
+#  Should the normalized distribution and gaussian be in the same scale?
+#  Need Test with well behavioured funcitons
+#######
 
 #   plot distribution and gaussian
     plt.step(distbins, distribution)
