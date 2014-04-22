@@ -47,9 +47,11 @@ for result in results:
 
 print 'time = {0}'.format(time.time() - tic)
 
-plt.plot(freqs, z2n)
+plt.plot(freqs, z2n, label='f = {0:.3e}'.format(freqs[np.argmax(z2n)]))
+plt.legend(loc='best')
 plt.show()
-plt.plot(freqs, z2n)
+plt.plot(freqs, z2n, label='f = {0:.3e}'.format(freqs[np.argmax(z2n)]))
+plt.legend(loc='best')
 plt.savefig('z2n.png')
 
 #create and write the output.fits file

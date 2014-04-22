@@ -49,7 +49,7 @@ plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
 
 # Plot powerspectrum on bottom panel
 plt.subplot(2, 1, 2)
-plt.plot(f, p, 'b.-', label='f = {0}'.format(f[np.argmax(p)]))
+plt.plot(f, p, 'b.-', label='f = {0:.3e}'.format(f[np.argmax(p)]))
 plt.xlabel('Frequency [Hz]', fontsize=12)
 plt.ylabel('Power', fontsize=12)
 plt.legend(loc='best')
