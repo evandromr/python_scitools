@@ -41,13 +41,13 @@ norm = ntime.shape[0]
 interval = time.max()-time.min()
 
 # minimum frequency limited by observed time
-freqmin = 1.0/interval
+freqmin = 1.0/(interval-bin)
 
 # maximium frequency limited by time resolution
-freqmax = 1.0/bin
+freqmax = 1.0/(2.0*bin)
 
 # size of the array of frequencies
-nint = len(nrate)
+nint = 10*len(nrate)
 
 # Frequency array
 freqs = np.linspace(freqmin, freqmax, nint)
@@ -74,4 +74,5 @@ plt.ylabel('$Z_n^2$ Power', fontsize=12)
 plt.xlim(freqmin, freqmax)
 
 # show plot
+plt.legend(loc='best')
 plt.show()
