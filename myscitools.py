@@ -73,7 +73,7 @@ def makefits(outptname='output.fits', *cols):
     for i in xrange(len(cols)):
         columns.append(fits.Column(name=cols[i][1], format=cols[i][2],
                                    unit=cols[i][3], array=cols[i][0]))
-    tbhdu = fits.new_table(columns)
+    tbhdu = fits.TableHDU.from_columns(columns)
     tbhdu.writeto(outptname)
     print '\n Created file {0} \n'.format(outptname)
 
