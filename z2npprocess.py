@@ -13,18 +13,38 @@ import myscitools  # my personal tools
 
 #input file informations and variables atributions----------------------
 inptname = str(raw_input('Input file (with extension): '))
-outptname = os.path.splitext(inptname)[0]+'_z2n_output_t.fits'
+outptname = os.path.splitext(inptname)[0]+'_z2n_output.fits'
 inpt = fits.open(inptname)
 times = inpt[1].data.field('TIME')
 inpt.close()
 
-startf = float(raw_input('Enter the start frequency: '))
+interval = float(times.max()-times.min())
+startf = 1.0/interval
+
+print "The start frequency is: ", startf
+query = str(raw_input("Change the start frequency? (y/n): "))
+if (query == 'y') or (query == 'Y'):
+    startf = float(raw_input('Enter the start frequency: '))
+else:
+    pass
+
 endf = float(raw_input('Enter the last frequency: '))
-deltaf = float(raw_input('Enter the frequency interval: '))
+
+over = float(raw_input('Enter oversample factor: '))
+fact = 1.0/over
+deltaf = fact/interval
+
+print "The frequency step will be: ", deltaf
+query2 = str(raw_input('Change frequency step? (y/n): '))
+if (query2 == 'y') or (query2 == 'Y'):
+    deltaf = float(raw_input('Enter the frequency interval: '))
+else:
+    pass
+
 freqs = np.arange(startf, endf, deltaf)
 
-harm = int(raw_input('The Harmonic to be considered:'))
-
+#harm = int(raw_input('The Harmonic to be considered:'))
+harm = 1
 #----------------- The parallelism starts here ------------------------
 nproc = int(raw_input('Enter the number of processor to use: '))
 if nproc < 1:
@@ -47,14 +67,15 @@ for result in results:
 
 print 'time = {0}'.format(time.time() - tic)
 
-plt.plot(freqs, z2n, label='f = {0:.3e}'.format(freqs[np.argmax(z2n)]))
-plt.legend(loc='best')
+plt.plot(freqs, z2n)
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Z2n Power')
+plt.title(inptname)
 plt.show()
-plt.plot(freqs, z2n, label='f = {0:.3e}'.format(freqs[np.argmax(z2n)]))
-plt.legend(loc='best')
+plt.plot(freqs, z2n)
 plt.savefig('z2n.png')
 
 #create and write the output.fits file
-col1 = [freqs, 'Frequency', 'E', 'Hz']
-col2 = [z2n, 'Z2nPower', 'E', 'arbitrary']
+col1 = [freqs, 'frequency', 'E', 'Hz']
+col2 = [z2n, 'z2nPower', 'E', 'arbitrary']
 myscitools.makefits(outptname, col1, col2)
