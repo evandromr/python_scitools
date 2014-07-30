@@ -15,7 +15,6 @@ rate = np.array(lc[1].data["RATE"], dtype='float64')
 time = np.array(lc[1].data["TIME"], dtype='float64')
 time -= time.min()
 
-print 'TIME =', max(time)
 # Exclue NaN values -------------------------
 print ''
 print 'Excluding nan and negative values...'
@@ -40,22 +39,31 @@ nrate -= nrate.mean()
 freqmax = 1.0/bin
 
 # Ther periodogram itself
-f, p = ss.welch(nrate, fs=freqmax)#, nperseg=len(nrate))
+f, p = ss.periodogram(nrate, fs=freqmax)#, nfft=1500)
+
+print 'TIME =', max(time)
 
 # Plot lightcurve on top panel
-plt.subplot(2, 1, 1)
-plt.plot(ntime, nrate)
-plt.xlabel('Time [s]')#, fontsize=12)
-plt.ylabel('Net Count Rate [counts/s]')#, fontsize=12)
-plt.xlim(min(ntime), max(ntime))
-
+#plt.subplot(2, 1, 1)
+#plt.plot(ntime, nrate, 'bo-')
+#plt.xlabel('Time [s]', fontsize=12)
+#plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
 # Plot powerspectrum on bottom panel
-plt.subplot(2, 1, 2)
-plt.plot(f, p, 'b.-', label='f = {0:.3e}'.format(f[np.argmax(p)]))
-plt.xlabel('Frequency [Hz]')#, fontsize=12)
-plt.ylabel('Power')#, fontsize=12)
-plt.xlim(min(f), max(f))
-plt.legend(loc='best')
+#plt.subplot(2, 1, 2)
+#plt.plot(f, p, 'b.-', label='f = {0:.3e}'.format(f[np.argmax(p)]))
+#plt.xlabel('Frequency [Hz]', fontsize=12)
+#plt.ylabel('Power', fontsize=12)
+#plt.legend(loc='best')
 
 # show plot
+#plt.show()
+
+#plt.plot(f, p)
+plt.plot(f, p, linestyle='steps', label='T$_{{peak}}$ = {0:.3f} s'.format(1.0/f[np.argmax(p)]))
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Power')
+plt.xlim(min(f), max(f))
+plt.legend(loc='best', frameon=False)
+plt.savefig("periodogram.pdf", orientation='landscape', papertype='a4',
+        format='pdf', bbox_inches='tight')
 plt.show()
