@@ -36,23 +36,39 @@ ntime = np.delete(time, exclude)
 nrate -= nrate.mean()
 
 # maximum frequecy limited by resolution
-freqmax = 1.0/bin
+fsample = 1.0/(bin)
+
+numb = 10*len(time)
 
 # Ther periodogram itself
-f, p = ss.periodogram(nrate, fs=freqmax)
+f, p = ss.periodogram(nrate, fs=fsample, nfft=numb)
+
+print 'fmax = ', max(f)
+print 'fmin = ', min(f)
+print 'TIME =', max(time)
 
 # Plot lightcurve on top panel
 plt.subplot(2, 1, 1)
 plt.plot(ntime, nrate, 'bo-')
-plt.xlabel('Time [s]', fontsize=12)
-plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
-
+plt.xlabel('Tempo [s]', fontsize=12)
+plt.ylabel('Cnts. s$^{{-1}}$', fontsize=12)
 # Plot powerspectrum on bottom panel
 plt.subplot(2, 1, 2)
-plt.plot(f, p, 'b.-', label='f = {0:.3e}'.format(f[np.argmax(p)]))
-plt.xlabel('Frequency [Hz]', fontsize=12)
-plt.ylabel('Power', fontsize=12)
+plt.plot(f, p, 'b', linestyle='steps', label='T$_{{pico}}$ = {0:.0f} s'.format(1/f[np.argmax(p)]))
+plt.xlabel('Frequencia [Hz]', fontsize=12)
+plt.ylabel('Potencia', fontsize=12)
 plt.legend(loc='best')
 
 # show plot
+plt.savefig("periodogram_testes.pdf", orientation='landscape', papertype='a4',
+        format='pdf', bbox_inches='tight')
 plt.show()
+
+#plt.plot(f, p)
+#plt.plot(f, p, label='T$_{{pico}}$ = {0:.0f} s'.format(1.0/f[np.argmax(p)]))
+#plt.xlabel('Frequencia (Hz)')
+#plt.ylabelf'Potencia')
+#plt.legend(loc='best', frameon=False)
+#plt.savefig("periodogram_2012.pdf", orientation='landscape', papertype='a4',
+#        format='pdf', bbox_inches='tight')
+#plt.show()

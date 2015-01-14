@@ -41,7 +41,8 @@ norm = ntime.shape[0]
 interval = time.max()-time.min()
 
 # minimum frequency limited by observed time
-freqmin = 1.0/(interval-bin)
+#freqmin = 2.0/(interval)
+freqmin = 1.0/interval
 
 # maximium frequency limited by time resolution
 freqmax = 1.0/(2.0*bin)
@@ -55,24 +56,33 @@ freqs = np.linspace(freqmin, freqmax, nint)
 # scipy.signal.lombscargle uses angular frequencies
 afreqs = 2.0*np.pi*freqs
 
+print 'fmax = ', max(freqs)
+print 'fmin = ', min(freqs)
+print "T =", interval
+
 # Ther periodogram itself
 pgram = ss.lombscargle(ntime, nrate, afreqs)
 
 # Plot lightcurve on top panel
 plt.subplot(2, 1, 1)
 plt.plot(ntime, nrate, 'bo-')
-plt.xlabel('Time [s]', fontsize=12)
-plt.ylabel('Normalized Count Rate [counts/s]', fontsize=12)
+plt.xlabel('Tempo [s]', fontsize=12)
+plt.ylabel('Cnts s$^{{-1}}$', fontsize=12)
 plt.xlim(time.min(), time.max())
+plt.annotate('(a) 2004', xy=(100,0.19), xytext=(100, 0.22), color='black',
+                 weight='bold', fontsize=16)
 
 # Plot powerspectrum on bottom panel
 plt.subplot(2, 1, 2)
-plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b.-',
-        label='f = {0:.3e}'.format(freqs[np.argmax(pgram)]))
-plt.xlabel('Frequency [Hz]', fontsize=12)
-plt.ylabel('$Z_n^2$ Power', fontsize=12)
+plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b-',
+        label='T$_{{pico}}$ = {0:.0f} s'.format(1/freqs[np.argmax(pgram)]))
+plt.xlabel('Frequencia [Hz]', fontsize=12)
+plt.ylabel('Potencia', fontsize=12)
 plt.xlim(freqmin, freqmax)
 
 # show plot
 plt.legend(loc='best')
+plt.savefig('lombscargle_2004.pdf', bbox_width='tight', format='pdf',
+        orientation='landscape')
 plt.show()
+
