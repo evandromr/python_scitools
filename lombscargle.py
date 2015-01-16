@@ -6,7 +6,7 @@ import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 
 
-inpt = str(raw_input("Nome do Arquivo: "))
+inpt = str(raw_input("File: "))
 lc = fits.open(inpt)
 bin = float(raw_input("bin size (or camera resolution): "))
 
@@ -32,6 +32,7 @@ ntime = np.delete(time, exclude)
 #-----------------------------------------------------------
 
 # normalize rate array
+mean = nrate.mean()
 nrate -= nrate.mean()
 
 # normalization to the periodogram
@@ -40,11 +41,10 @@ norm = ntime.shape[0]
 # duration of observation
 interval = time.max()-time.min()
 
-# minimum frequency limited by observed time
-#freqmin = 2.0/(interval)
-freqmin = 1.0/interval
+# minimum frequency limited to 0,01/T
+freqmin = 0.01/interval
 
-# maximium frequency limited by time resolution
+# maximium Nyquist frequency limited by time resolution
 freqmax = 1.0/(2.0*bin)
 
 # size of the array of frequencies
@@ -56,33 +56,35 @@ freqs = np.linspace(freqmin, freqmax, nint)
 # scipy.signal.lombscargle uses angular frequencies
 afreqs = 2.0*np.pi*freqs
 
-print 'fmax = ', max(freqs)
-print 'fmin = ', min(freqs)
-print "T =", interval
+print 'f_max = ', max(freqs)
+print 'f_min = ', min(freqs)
+print "T_obs =", interval
+print "N_points = ", norm
+print "N_freqs = ", nint
 
 # Ther periodogram itself
 pgram = ss.lombscargle(ntime, nrate, afreqs)
 
-# Plot lightcurve on top panel
-plt.subplot(2, 1, 1)
-plt.plot(ntime, nrate, 'bo-')
-plt.xlabel('Tempo [s]', fontsize=12)
-plt.ylabel('Cnts s$^{{-1}}$', fontsize=12)
-plt.xlim(time.min(), time.max())
-plt.annotate('(a) 2004', xy=(100,0.19), xytext=(100, 0.22), color='black',
-                 weight='bold', fontsize=16)
+# Normalize pgram to units of nrate/freq
+pnorm = np.sqrt(4.0*(pgram/norm))
 
-# Plot powerspectrum on bottom panel
-plt.subplot(2, 1, 2)
-plt.plot(freqs, np.sqrt(4*(pgram/norm)), 'b-',
-        label='T$_{{pico}}$ = {0:.0f} s'.format(1/freqs[np.argmax(pgram)]))
-plt.xlabel('Frequencia [Hz]', fontsize=12)
+# # Plot lightcurve on top panel
+# plt.subplot(2, 1, 1)
+# plt.plot(ntime, nrate, 'bo-')
+# plt.xlabel('Tempo (s)', fontsize=12)
+# plt.ylabel('Cts. s$^{{-1}}$', fontsize=12)
+# plt.xlim(time.min(), time.max())
+#
+# # Plot powerspectrum on bottom panel
+# plt.subplot(2, 1, 2)
+plt.plot(freqs, pnorm, 'b-',
+    label='T$_{{pico}}$ = {0:.0f} s'.format(1.0/freqs[np.argmax(pnorm)]))
+plt.xlabel('Frequencia (Hz)', fontsize=12)
 plt.ylabel('Potencia', fontsize=12)
-plt.xlim(freqmin, freqmax)
+plt.xlim(min(freqs), max(freqs))
+plt.legend(loc=1)
 
-# show plot
-plt.legend(loc='best')
-plt.savefig('lombscargle_2004.pdf', bbox_width='tight', format='pdf',
+# save and show plot
+plt.savefig('lombscargle_tests.pdf', bbox_width='tight', format='pdf',
         orientation='landscape')
 plt.show()
-

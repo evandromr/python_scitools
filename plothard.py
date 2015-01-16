@@ -3,7 +3,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from astropy.io import fits
-
+import scipy.optimize as so
+import scipy.stats as ss
 
 if __name__ == "__main__":
     '''
@@ -29,13 +30,36 @@ if __name__ == "__main__":
 
     #x -= min(x)
 
+    # def contfunc(x, a):
+    #     return a
+    # def linfunc(x, a, b):
+    #     return (a*x) + b
+    # def sqrfunc(x, a, b, c):
+    #     return a*(x**2) + b*x + c
+
+    r = yb/y
+    s = yb+y
+
+    slope, mean, rval, pval, stderr =  ss.linregress(r,s)
+
+    #popt, pcov = so.curve_fit(contfunc, r, s)
+    #popt, pcov = so.curve_fit(linfunc, r, s)
+    #perr = np.sqrt(np.diag(pcov))
+
+    print 'slope =', slope
+    print 'mean =', mean
+    print 'rval =', rval
+    print 'pval = ', pval
+
     plt.errorbar(y+yb, yb/y, xerr=(e+eb), yerr=(((yb*e)-(y*eb))/(y**2)),
-    ls='none')
-    #plt.errorbar(x, yb, yerr=eb, fmt='o-', color='b')
-    #plt.xlim(min(x)-350, max(x)+350)
+                 ls='none', fmt='bo')
+    plt.plot(slope*r + mean, r, 'r', linewidth=2)
     plt.xlabel('Rate$_1$ + Rate$_2$ (cts/s)')
     plt.ylabel('Rate$_2$/Rate$_1$')
-    plt.savefig(cam+'_hard_'+eng+'keV_'+eng2+'keV_bin'+binsize+'.pdf', orientation='landscape', papertype='a4',
+    plt.xlim(min(s), max(s))
+
+    plt.savefig(cam+'_hard_'+eng+'keV_'+eng2+'keV_bin'+binsize+'.pdf',
+                orientation='landscape', papertype='a4',
                 format='pdf', bbox_inches='tight')
     plt.show()
     plt.clf()

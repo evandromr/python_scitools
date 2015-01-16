@@ -5,7 +5,6 @@ import scipy.signal as ss
 import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 
-
 inpt = str(raw_input("Nome do Arquivo: "))
 lc = fits.open(inpt)
 bin = float(raw_input("bin size (or camera resolution): "))
@@ -35,40 +34,37 @@ ntime = np.delete(time, exclude)
 # normalize count rate
 nrate -= nrate.mean()
 
-# maximum frequecy limited by resolution
+# sample frequecy limited by resolution
 fsample = 1.0/(bin)
 
 numb = 10*len(time)
 
-# Ther periodogram itself
+# Thr periodogram itself
 f, p = ss.periodogram(nrate, fs=fsample, nfft=numb)
 
-print 'fmax = ', max(f)
-print 'fmin = ', min(f)
-print 'TIME =', max(time)
+# normalize the periodogram to unts of nrate/freq
+pnorm = np.sqrt(p)/(2*len(time))
 
-# Plot lightcurve on top panel
-plt.subplot(2, 1, 1)
-plt.plot(ntime, nrate, 'bo-')
-plt.xlabel('Tempo [s]', fontsize=12)
-plt.ylabel('Cnts. s$^{{-1}}$', fontsize=12)
-# Plot powerspectrum on bottom panel
-plt.subplot(2, 1, 2)
-plt.plot(f, p, 'b', linestyle='steps', label='T$_{{pico}}$ = {0:.0f} s'.format(1/f[np.argmax(p)]))
-plt.xlabel('Frequencia [Hz]', fontsize=12)
+print 'f_max = ', max(f)
+print 'f_min = ', min(f)
+print 'T_obs =', max(time)
+
+# # Plot lightcurve on top panel
+# plt.subplot(2, 1, 1)
+# plt.plot(ntime, nrate, 'bo-')
+# plt.xlabel('Tempo (s)', fontsize=12)
+# plt.ylabel('Cts. s$^{{-1}}$', fontsize=12)
+#
+# # Plot powerspectrum on bottom panel
+# plt.subplot(2, 1, 2)
+plt.plot(f, pnorm, 'b-',
+    label='T$_{{pico}}$ = {0:.0f} s'.format(1/f[np.argmax(pnorm)]))
+plt.xlabel('Frequencia (Hz)', fontsize=12)
 plt.ylabel('Potencia', fontsize=12)
-plt.legend(loc='best')
+plt.xlim(min(f), max(f))
+plt.legend(loc=1)
 
-# show plot
+# save and show plot
 plt.savefig("periodogram_testes.pdf", orientation='landscape', papertype='a4',
         format='pdf', bbox_inches='tight')
 plt.show()
-
-#plt.plot(f, p)
-#plt.plot(f, p, label='T$_{{pico}}$ = {0:.0f} s'.format(1.0/f[np.argmax(p)]))
-#plt.xlabel('Frequencia (Hz)')
-#plt.ylabelf'Potencia')
-#plt.legend(loc='best', frameon=False)
-#plt.savefig("periodogram_2012.pdf", orientation='landscape', papertype='a4',
-#        format='pdf', bbox_inches='tight')
-#plt.show()
