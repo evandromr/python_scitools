@@ -29,6 +29,7 @@ if __name__ == "__main__":
     bkg.close()
 
     x -= min(x)
+    x /= 1000
 
     r = yb/y
     slope, mean, rval, pval, stderr =  ss.linregress(x,r)
@@ -42,7 +43,7 @@ if __name__ == "__main__":
                  fmt='ko-')
 
     plt.plot(x, slope*x + mean, 'r', linewidth=2)
-    plt.xlabel('Tempo (s)')
+    plt.xlabel('Tempo (ks)')
     plt.ylabel('Cts. s$^{-1}$$_{(2,0-10,0 keV)}$ / Cts. s$^{-1}$$_{(0,3-2,0 keV)}$')
     plt.savefig('hardtime.pdf', orientation='landscape', papertype='a4',
                 format='pdf', bbox_inches='tight')
