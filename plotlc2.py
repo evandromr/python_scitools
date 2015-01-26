@@ -27,13 +27,15 @@ if __name__ == "__main__":
     bkg.close()
 
     x -= min(x)
+    x /= 1000.0
 
     plt.errorbar(x, y, yerr=e, fmt='o-', color='k')
     plt.errorbar(x, yb, yerr=eb, fmt='o-', color='b')
-    plt.xlim(min(x)-350, max(x)+350)
-    plt.xlabel('TIME [s]')
-    plt.ylabel('RATE [cts/s]')
-    plt.savefig(cam+'_lc_'+eng+'keV_bin'+binsize+'.pdf', orientation='landscape', papertype='a4',
+    plt.xlim(min(x), max(x))
+    plt.xlabel('Tempo (ks)')
+    plt.ylabel('Cts. s$^{-1}$')
+    #plt.savefig(cam+'_lc_'+eng+'keV_bin'+binsize+'.pdf', orientation='landscape', papertype='a4',
+    plt.savefig('lightcurve.pdf', orientation='landscape', papertype='a4',
                 format='pdf', bbox_inches='tight')
     plt.show()
     plt.clf()
