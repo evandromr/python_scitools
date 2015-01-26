@@ -40,10 +40,10 @@ fsample = 1.0/(bin)
 numb = 10*len(time)
 
 # Thr periodogram itself
-f, p = ss.periodogram(nrate, fs=fsample, nfft=numb)
+f, p = ss.periodogram(nrate, fs=fsample, nfft=numb, scaling='spectrum')
 
 # normalize the periodogram to unts of nrate/freq
-pnorm = np.sqrt(p)/(2*len(time))
+pnorm = np.sqrt(p*2.0)
 
 print 'f_max = ', max(f)
 print 'f_min = ', min(f)
