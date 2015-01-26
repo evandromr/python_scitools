@@ -30,7 +30,7 @@ if __name__ == "__main__":
     x /= 1000.0
 
     plt.errorbar(x, y, yerr=e, fmt='o-', color='k')
-    plt.errorbar(x, yb, yerr=eb, fmt='o-', color='b')
+    plt.plot(x, yb, 'b-')
     plt.xlim(min(x), max(x))
     plt.xlabel('Tempo (ks)')
     plt.ylabel('Cts. s$^{-1}$')
